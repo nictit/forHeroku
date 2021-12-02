@@ -1,0 +1,1 @@
+web: gunicorn sinit:app --log-file -
