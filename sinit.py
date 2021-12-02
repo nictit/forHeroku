@@ -1,8 +1,9 @@
 #for future make ship as an class with objects of ships
+import requests
+import bs4
+import telebot
 from requests import get
 from bs4 import BeautifulSoup
-import telebot
-
 
 #required initializing parameters
 HEADERS = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36"}
