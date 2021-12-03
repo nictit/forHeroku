@@ -4,6 +4,9 @@ import bs4
 import telebot
 from requests import get
 from bs4 import BeautifulSoup
+import os
+from flask import Flask, request
+import logging
 
 #required initializing parameters
 HEADERS = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36"}
@@ -131,13 +134,34 @@ def main():
     all = nor + '\n' + cdn
     return all
 
-def tgbot(token):
-    bot = telebot.TeleBot(token)
-    @bot.message_handler(commands=["start"])
-    def start_message(message):
-        bot.send_message(message.chat.id, 'уже ищу...')
-        bot.send_message(message.chat.id, main())
+bot = telebot.TeleBot(token)
 
-    bot.polling()
+# Здесь пишем наши хэндлеры
+@bot.message_handler(commands=["start"])
+def start_message(message):
+    bot.send_message(message.chat.id, 'уже ищу...')
+    bot.send_message(message.chat.id, main())
+
+# Проверим, есть ли переменная окружения Хероку (как ее добавить смотрите ниже)
+if "HEROKU" in list(os.environ.keys()):
+    logger = telebot.logger
+    telebot.logger.setLevel(logging.INFO)
+
+    server = Flask(__name__)
+    @server.route("/bot", methods=['POST'])
+    def getMessage():
+        bot.process_new_updates([telebot.types.Update.de_json(request.stream.read().decode("utf-8"))])
+        return "!", 200
+    @server.route("/")
+    def webhook():
+        bot.remove_webhook()
+        bot.set_webhook(url="https://marinefinder.herokuapp.com/bot") # этот url нужно заменить на url вашего Хероку приложения
+        return "?", 200
+    server.run(host="0.0.0.0", port=os.environ.get('PORT', 80))
+else:
+    # если переменной окружения HEROKU нету, значит это запуск с машины разработчика.
+    # Удаляем вебхук на всякий случай, и запускаем с обычным поллингом.
+    bot.remove_webhook()
+    bot.polling(none_stop=True)
 
 tgbot(token)
