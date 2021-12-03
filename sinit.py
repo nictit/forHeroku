@@ -42,7 +42,8 @@ def fileReader():
                  ['CDN', 'CGAR', 316160000],
                  ['CDN', 'CGBV', 316200000],
                  ['CDN', 'CGAY', 316191000],
-                 ['CDN', 'CGAL', 316158000]]
+                 ['CDN', 'CGAL', 316158000],
+                 ['CDN', 'CGJX', 316139000]]]
 
     return nor_ships, cdn_ships
 
