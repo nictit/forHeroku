@@ -132,10 +132,10 @@ def main():
         cdn += output(ship)
         cdn += '\n'
     all = nor + '\n' + cdn
-    return all
+    return 'all'
+
 
 bot = telebot.TeleBot(token)
-
 
 @bot.message_handler(commands=["start"])
 def start_message(message):
