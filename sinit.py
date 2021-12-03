@@ -136,13 +136,13 @@ def main():
 
 bot = telebot.TeleBot(token)
 
-# Здесь пишем наши хэндлеры
+
 @bot.message_handler(commands=["start"])
 def start_message(message):
     bot.send_message(message.chat.id, 'уже ищу...')
     bot.send_message(message.chat.id, main())
 
-# Проверим, есть ли переменная окружения Хероку (как ее добавить смотрите ниже)
+
 if "HEROKU" in list(os.environ.keys()):
     logger = telebot.logger
     telebot.logger.setLevel(logging.INFO)
@@ -155,13 +155,9 @@ if "HEROKU" in list(os.environ.keys()):
     @server.route("/")
     def webhook():
         bot.remove_webhook()
-        bot.set_webhook(url="https://marinefinder.herokuapp.com/bot") # этот url нужно заменить на url вашего Хероку приложения
+        bot.set_webhook(url="https://marinefinder.herokuapp.com/bot")
         return "?", 200
     server.run(host="0.0.0.0", port=os.environ.get('PORT', 80))
 else:
-    # если переменной окружения HEROKU нету, значит это запуск с машины разработчика.
-    # Удаляем вебхук на всякий случай, и запускаем с обычным поллингом.
     bot.remove_webhook()
     bot.polling(none_stop=True)
-
-tgbot(token)
