@@ -133,13 +133,13 @@ def main():
         cdn += '\n'
     all = nor + '\n' + cdn
     return all
-
+print(main())
 
 bot = telebot.TeleBot(token)
 
 @bot.message_handler(commands=["start"])
 def start_message(message):
-    bot.send_message(message.chat.id, 'уже ищу...')
+    #bot.send_message(message.chat.id, 'уже ищу...')
     bot.send_message(message.chat.id, main())
 
 
