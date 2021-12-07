@@ -140,7 +140,7 @@ bot = telebot.TeleBot(token)
 @bot.message_handler(commands=["start"])
 def start_message(message):
     #bot.send_message(message.chat.id, 'уже ищу...')
-    bot.send_message(message.chat.id, 'main()')
+    bot.send_message(message.chat.id, main())
 
 
 if "HEROKU" in list(os.environ.keys()):
@@ -160,4 +160,4 @@ if "HEROKU" in list(os.environ.keys()):
     server.run(host="0.0.0.0", port=os.environ.get('PORT', 80))
 else:
     bot.remove_webhook()
-    bot.polling(none_stop=True)
+bot.polling(none_stop=True)
